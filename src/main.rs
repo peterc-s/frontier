@@ -19,10 +19,12 @@ fn main() {
         process::exit(1);
     });
 
-    let pkgs_to_install = config.pkgs_to_install().unwrap_or_else(|err| {
+    let pkgs = config.pkgs_to_install().unwrap_or_else(|err| {
         eprintln!("Error parsing config: {}", err);
         process::exit(1);
     });
 
-    let install_str = pkgs_to_install.join(" ");
+    for pkg in pkgs {
+        println!("{}", pkg);
+    }
 }

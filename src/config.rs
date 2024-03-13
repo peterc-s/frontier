@@ -50,9 +50,9 @@ impl Config {
         Ok(config)
     }
 
-    ///Gets the packages to install from the \[pkgs\] section as a vec,
+    ///Gets the packages to install from the \[pkgs\] section as an iterator,
     ///filters out any non-string elements.
-    pub fn pkgs_to_install(&self) -> Result<Vec<&str>, &'static str> {
+    pub fn pkgs_to_install(&self) -> Result<impl Iterator<Item = &str>, &'static str> {
         if !self.pkgs.install.is_array() {
             return Err("expected field `install` of [pkgs] to be an array.");
         }
@@ -64,7 +64,6 @@ impl Config {
         Ok(pkgs_iter
             .map(|pkg| pkg.as_str())
             .filter(|pkg| pkg.is_some())
-            .map(|pkg| pkg.unwrap())
-            .collect())
+            .map(|pkg| pkg.unwrap()))
     }
 }

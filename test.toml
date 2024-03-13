@@ -6,5 +6,4 @@ install = [
     "neofetch",
     "neovim",
     "lolcat-rs",
-    "timg",
 ]
