@@ -19,12 +19,5 @@ fn main() {
         process::exit(1);
     });
 
-    let pkgs = config.pkgs_to_install().unwrap_or_else(|err| {
-        eprintln!("Error parsing config: {}", err);
-        process::exit(1);
-    });
-
-    for pkg in pkgs {
-        println!("{}", pkg);
-    }
+    dbg!(config);
 }
