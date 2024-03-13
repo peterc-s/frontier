@@ -1,9 +1,0 @@
-[package_manager]
-name = "pacman"
-
-[pkgs]
-install = [
-    "neovim",
-    "neofetch",
-    "lolcat-rs",
-]
