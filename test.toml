@@ -3,7 +3,7 @@ name = "pacman"
 
 [pkgs]
 install = [
-    "neovim",
     "neofetch",
+    "neovim",
     "lolcat-rs",
 ]
