@@ -20,9 +20,6 @@ pub struct Packages {
     pub install: Value,
 }
 
-///Contains the supported package managers
-pub const PKG_MANAGERS: [&str; 1] = ["pacman"];
-
 impl Config {
     ///Builds a config from the contents of a toml file
     ///
@@ -69,15 +66,5 @@ impl Config {
             .filter(|pkg| pkg.is_some())
             .map(|pkg| pkg.unwrap())
             .collect())
-    }
-
-    pub fn pkg_mgr(&self) -> Result<&str, &'static str> {
-        if !self.package_manager.name.is_str() {
-            return Err("expected field `name` of [package_manager] to be a string.");
-        }
-
-        assert!(self.package_manager.name.as_str().is_some());
-
-        Ok(self.package_manager.name.as_str().unwrap())
     }
 }

@@ -24,17 +24,5 @@ fn main() {
         process::exit(1);
     });
 
-    let pkg_mgr = config.pkg_mgr().unwrap();
-
-    if !config::PKG_MANAGERS.contains(&pkg_mgr) {
-        eprintln!(
-            "Error parsing config: {} is not a supported package manager.",
-            pkg_mgr
-        );
-        process::exit(1);
-    }
-
     let install_str = pkgs_to_install.join(" ");
-
-    println!("{} {}", pkg_mgr, install_str);
 }
