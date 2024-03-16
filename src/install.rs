@@ -1,6 +1,55 @@
 use std::error::Error;
-use std::process::Command;
-use crate::config::PkgMgrs;
+use std::{process, process::Command};
+use colored::Colorize;
+use crate::config::{PkgMgrs, Config};
+use clap::Args;
+use std::fs;
+
+#[derive(Args)]
+#[clap(about = "Installs packages from a frontier configuration file")]
+pub struct Install {
+    #[clap(help = "Sets the configuration toml file.")]
+    config: String,
+}
+
+impl Install {
+    /// Runs the installation subcommand.
+    pub fn run(&self) {
+        let config_contents = fs::read_to_string(&self.config).unwrap_or_else(|err| {
+            eprintln!("Error reading config file: {}", err);
+            process::exit(1);
+        });
+
+        // parse toml from input file
+        let config = Config::build(config_contents).unwrap_or_else(|err| {
+            eprintln!("Error parsing config: {}", err.message());
+            process::exit(1);
+        });
+
+        let pkgs_to_install = config.pkgs_to_install().unwrap_or_else(|err| {
+            eprintln!("Error parsing config: {}", err);
+            process::exit(1);
+        });
+
+        // gets the package manager from the file
+        let pkg_mgr = config.pkg_mgr().unwrap_or_else(|err| {
+            eprintln!("Error parsing config: {}", err);
+            process::exit(1);
+        });
+
+        // gets the args to the package manager
+        let args_to_pkg_mgr = config.args_to_pkg_mgr().unwrap_or_else(|err| {
+            eprintln!("Error parsing config: {}", err);
+            process::exit(1);
+        });
+
+        println!("{} Running install command.", "[frontier]".bold().purple());
+        install_pkgs(pkg_mgr, args_to_pkg_mgr, pkgs_to_install).unwrap_or_else(|err| {
+            eprintln!("Error: {}", err);
+            process::exit(1);
+        });
+    }
+}
 
 /// Used to install the packages in the packages list using a given supported
 /// package manager.
