@@ -1,18 +1,19 @@
 use std::error::Error;
-use std::process::Command;
-use std::process;
+use std::{process, process::Command};
 use colored::Colorize;
 use crate::config::{PkgMgrs, Config};
 use clap::Args;
 use std::fs;
 
 #[derive(Args)]
+#[clap(about = "Installs packages from a frontier configuration file")]
 pub struct Install {
     #[clap(help = "Sets the configuration toml file.")]
     config: String,
 }
 
 impl Install {
+    /// Runs the installation subcommand.
     pub fn run(&self) {
         let config_contents = fs::read_to_string(&self.config).unwrap_or_else(|err| {
             eprintln!("Error reading config file: {}", err);
