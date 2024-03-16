@@ -1,0 +1,9 @@
+[package_manager]
+args = ["--noconfirm"]
+
+[pkgs]
+install = [
+    "neofetch",
+    "alacritty",
+    "timg",
+]
