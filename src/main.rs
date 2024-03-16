@@ -1,6 +1,5 @@
 use clap::Parser;
 
-mod args;
 mod config;
 mod install;
 
@@ -13,6 +12,7 @@ fn main() {
     // parse command line arguments
     let args = Frontier::parse();
 
+    // perform specific subcommand
     match args {
         Frontier::Install(install) => install.run(),
     }
