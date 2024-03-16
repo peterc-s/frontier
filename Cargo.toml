@@ -10,5 +10,6 @@ authors = ["Peter Chaplin-Smith"]
 
 [dependencies]
 clap = { version = "4.5.2", features = ["derive"] }
+phf = { version = "0.11.2", features = ["phf_macros", "macros"] }
 serde = { version = "1.0.197", features = ["derive"] }
 toml = "0.8.11"

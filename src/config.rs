@@ -1,5 +1,6 @@
 use serde::Deserialize;
 use toml::Value;
+use phf::phf_map;
 
 ///Contains the expected configuration in the toml file
 #[derive(Deserialize, Debug)]
@@ -21,7 +22,15 @@ pub struct Packages {
 }
 
 ///Contains the supported package managers
-pub const PKG_MANAGERS: [&str; 1] = ["pacman"];
+#[derive(Debug)]
+pub enum PkgMgrs {
+    Pacman,
+}
+
+pub static PKG_MGR_MAP: phf::Map<&str, PkgMgrs> = phf_map! {
+    "pacman" => PkgMgrs::Pacman,
+};
+
 
 impl Config {
     ///Builds a config from the contents of a toml file
@@ -71,13 +80,21 @@ impl Config {
             .collect())
     }
 
-    pub fn pkg_mgr(&self) -> Result<&str, &'static str> {
+    pub fn pkg_mgr(&self) -> Result<&PkgMgrs, &'static str> {
         if !self.package_manager.name.is_str() {
             return Err("expected field `name` of [package_manager] to be a string.");
         }
 
         assert!(self.package_manager.name.as_str().is_some());
 
-        Ok(self.package_manager.name.as_str().unwrap())
+        if !PKG_MGR_MAP.contains_key(self.package_manager.name.as_str().unwrap()) {
+            return Err("package manager isn't yet supported. Maybe check configuration for spelling mistakes?");
+        }
+        
+        Ok(PKG_MGR_MAP.get(
+                self.package_manager.name
+                .as_str()
+                .unwrap()
+            ).expect("couldn't find package manager despite passing check."))
     }
 }

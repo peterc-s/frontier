@@ -3,6 +3,7 @@ use std::{fs, process};
 
 mod args;
 mod config;
+mod install;
 
 fn main() {
     // parse command line arguments
@@ -26,15 +27,12 @@ fn main() {
 
     let pkg_mgr = config.pkg_mgr().unwrap();
 
-    if !config::PKG_MANAGERS.contains(&pkg_mgr) {
-        eprintln!(
-            "Error parsing config: {} is not a supported package manager.",
-            pkg_mgr
-        );
-        process::exit(1);
-    }
-
     let install_str = pkgs_to_install.join(" ");
 
-    println!("{} {}", pkg_mgr, install_str);
+    println!("{:?} {}", pkg_mgr, install_str);
+
+    install::install_pkgs(pkg_mgr, pkgs_to_install).unwrap_or_else(|err| {
+        eprintln!("Error parsing config: {}", err);
+        process::exit(1);
+    });
 }
