@@ -1,5 +1,6 @@
 [package_manager]
 name = "yay"
+args = ["--noconfirm"]
 
 [pkgs]
 install = [

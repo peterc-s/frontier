@@ -32,8 +32,13 @@ fn main() {
         process::exit(1);
     });
 
+    let args_to_pkg_mgr = config.args_to_pkg_mgr().unwrap_or_else(|err| {
+        eprintln!("Error parsing config: {}", err);
+        process::exit(1);
+    });
+
     println!("{} Running install command.", "[frontier]".bold().purple());
-    install::install_pkgs(pkg_mgr, pkgs_to_install).unwrap_or_else(|err| {
+    install::install_pkgs(pkg_mgr, args_to_pkg_mgr, pkgs_to_install).unwrap_or_else(|err| {
         eprintln!("Error: {}", err);
         process::exit(1);
     });
