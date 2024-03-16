@@ -19,5 +19,5 @@ Cargo.lock
 /target
 
 # to allow for testing
-
 *.toml
+!Cargo.toml
