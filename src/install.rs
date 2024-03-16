@@ -10,7 +10,7 @@ use crate::config::PkgMgrs;
 /// use frontier::install;
 /// use frontier::config::PkgMgrs;
 ///
-/// assert!(install::install_pkgs(&PkgMgrs::Yay, vec!["neovim", "neofetch"]).is_ok());
+/// assert!(install::install_pkgs(&PkgMgrs::Yay, vec!["--noconfirm"], vec!["neovim", "neofetch"]).is_ok());
 /// ```
 ///
 /// # Errors
