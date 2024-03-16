@@ -16,21 +16,29 @@ use crate::config::PkgMgrs;
 /// # Errors
 /// Can lead to errors if the command was malformed, if a process couldn't spawn,
 /// or std::process::Child.wait() fails.
-pub fn install_pkgs(package_manager: &PkgMgrs, packages: Vec<&str>) -> Result<(), Box<dyn Error>> {
+pub fn install_pkgs(package_manager: &PkgMgrs, args: Vec<&str>, packages: Vec<&str>) -> Result<(), Box<dyn Error>> {
     match package_manager {
-        PkgMgrs::Pacman => pacman(packages),
-        PkgMgrs::Yay => yay(packages),
+        PkgMgrs::Pacman => pacman(packages, args),
+        PkgMgrs::Yay => yay(packages, args),
     }
 }
 
-fn pacman(packages: Vec<&str>) -> Result<(), Box<dyn Error>> {
-    run_install_command(true, "pacman", vec!["-S", "--noconfirm"], packages)?;
+fn pacman(packages: Vec<&str>, mut args: Vec<&str>) -> Result<(), Box<dyn Error>> {
+    if !args.contains(&"-S") {
+        args.append(&mut vec!["-S"]);
+    }
+
+    run_install_command(true, "pacman", args, packages)?;
 
     Ok(())
 }
 
-fn yay(packages: Vec<&str>) -> Result<(), Box<dyn Error>> {
-    run_install_command(false, "yay", vec!["-S", "--noconfirm"], packages)?;
+fn yay(packages: Vec<&str>, mut args: Vec<&str>) -> Result<(), Box<dyn Error>> {
+    if !args.contains(&"-S") {
+        args.append(&mut vec!["-S"]);
+    }
+
+    run_install_command(false, "yay", args, packages)?;
 
     Ok(())
 }
