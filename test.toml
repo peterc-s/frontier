@@ -1,0 +1,9 @@
+[package_manager]
+name = "yay"
+
+[pkgs]
+install = [
+    "neofetch",
+    "alacritty",
+    "timg",
+]
