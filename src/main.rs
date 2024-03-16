@@ -32,7 +32,7 @@ fn main() {
     println!("{:?} {}", pkg_mgr, install_str);
 
     install::install_pkgs(pkg_mgr, pkgs_to_install).unwrap_or_else(|err| {
-        eprintln!("Error parsing config: {}", err);
+        eprintln!("Error: {}", err);
         process::exit(1);
     });
 }
