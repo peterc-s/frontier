@@ -13,7 +13,7 @@ pub struct Config {
 #[derive(Deserialize, Debug)]
 pub struct PackageManager {
     pub name: Value,
-    pub args: Value,
+    pub args: Option<Value>,
 }
 
 ///Contains the expected structure of [pkgs].
@@ -104,13 +104,19 @@ impl Config {
     }
 
     pub fn args_to_pkg_mgr(&self) -> Result<Vec<&str>, &'static str> {
-        if !self.package_manager.args.is_array() {
+        if self.package_manager.args.is_none() {
+            return Ok(vec![]);
+        }
+
+        let args = self.package_manager.args.as_ref().unwrap();
+
+        if !args.is_array() {
             return Err("expected field `args` of [package_manager] to be an array.");
         }
 
-        assert!(self.package_manager.args.as_array().is_some());
+        assert!(args.as_array().is_some());
 
-        let args_iter = self.package_manager.args.as_array().unwrap().iter();
+        let args_iter = args.as_array().unwrap().iter();
 
         Ok(args_iter
             .map(|arg| arg.as_str())
