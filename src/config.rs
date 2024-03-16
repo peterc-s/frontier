@@ -138,6 +138,9 @@ mod tests {
         Ok(fs::read_to_string(env!("CARGO_MANIFEST_DIR").to_owned() + "/resources/test/" + name)?)
     }
 
+    // there is a lot of repetition in these tests which is fine,
+    // it makes debugging a little easier.
+
     #[test]
     fn good_config() {
         let config_contents = get_test_file_contents("good/config.toml").unwrap();
@@ -194,5 +197,27 @@ mod tests {
         let pkgs_to_install = config.pkgs_to_install();
 
         assert!(pkgs_to_install.is_err(), "Install was: {:?}", pkgs_to_install);
+    }
+
+    #[test]
+    fn bad_config_unsupported_package_manager() {
+        let config_contents = get_test_file_contents("bad/unsupported_package_manager.toml").unwrap();
+
+        let config = Config::build(config_contents).unwrap();
+
+        let pkg_mgr = config.pkg_mgr();
+
+        assert!(pkg_mgr.is_err(), "Package manager was: {:?}", pkg_mgr);
+    }
+
+    #[test]
+    fn bad_config_package_manager_not_string() {
+        let config_contents = get_test_file_contents("bad/package_manager_not_string.toml").unwrap();
+
+        let config = Config::build(config_contents).unwrap();
+
+        let pkg_mgr = config.pkg_mgr();
+
+        assert!(pkg_mgr.is_err(), "Package manager was: {:?}", pkg_mgr);
     }
 }
