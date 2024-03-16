@@ -25,10 +25,12 @@ pub struct Packages {
 #[derive(Debug)]
 pub enum PkgMgrs {
     Pacman,
+    Yay,
 }
 
 pub static PKG_MGR_MAP: phf::Map<&str, PkgMgrs> = phf_map! {
     "pacman" => PkgMgrs::Pacman,
+    "yay" => PkgMgrs::Yay,
 };
 
 

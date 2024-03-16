@@ -5,15 +5,18 @@ use crate::config::PkgMgrs;
 pub fn install_pkgs(package_manager: &PkgMgrs, packages: Vec<&str>) -> Result<(), Box<dyn Error>> {
     match package_manager {
         PkgMgrs::Pacman => pacman(packages),
+        PkgMgrs::Yay => yay(packages),
     }
 }
 
 fn pacman(packages: Vec<&str>) -> Result<(), Box<dyn Error>> {
-    let result = run_install_command(true, "pacman", vec![ "-S", "--noconfirm"], packages);
+    run_install_command(true, "pacman", vec!["-S", "--noconfirm"], packages)?;
 
-    if result.is_err() {
-        return result;
-    }
+    Ok(())
+}
+
+fn yay(packages: Vec<&str>) -> Result<(), Box<dyn Error>> {
+    run_install_command(false, "yay", vec!["-S", "--noconfirm"], packages)?;
 
     Ok(())
 }

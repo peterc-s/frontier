@@ -1,8 +1,9 @@
 [package_manager]
-name = "pacman"
+name = "yay"
 
 [pkgs]
 install = [
     "neofetch",
-    "alacritty"
+    "alacritty",
+    "timg",
 ]
