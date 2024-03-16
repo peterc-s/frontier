@@ -2,6 +2,20 @@ use std::error::Error;
 use std::process::Command;
 use crate::config::PkgMgrs;
 
+/// Used to install the packages in the packages list using a given supported
+/// package manager.
+///
+/// # Example
+/// ```
+/// use frontier::install;
+/// use frontier::config::PkgMgrs;
+///
+/// assert!(install::install_pkgs(&PkgMgrs::Yay, vec!["neovim", "neofetch"]).is_ok());
+/// ```
+///
+/// # Errors
+/// Can lead to errors if the command was malformed, if a process couldn't spawn,
+/// or std::process::Child.wait() fails.
 pub fn install_pkgs(package_manager: &PkgMgrs, packages: Vec<&str>) -> Result<(), Box<dyn Error>> {
     match package_manager {
         PkgMgrs::Pacman => pacman(packages),

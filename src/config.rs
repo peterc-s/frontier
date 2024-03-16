@@ -2,32 +2,33 @@ use serde::Deserialize;
 use toml::Value;
 use phf::phf_map;
 
-///Contains the expected configuration in the toml file
+///Contains the expected configuration in the toml file.
 #[derive(Deserialize, Debug)]
 pub struct Config {
     pub package_manager: PackageManager,
     pub pkgs: Packages,
 }
 
-///Contains the expected structure of [package_manager]
+///Contains the expected structure of [package_manager].
 #[derive(Deserialize, Debug)]
 pub struct PackageManager {
     pub name: Value,
 }
 
-///Contains the expected structure of [pkgs]
+///Contains the expected structure of [pkgs].
 #[derive(Deserialize, Debug)]
 pub struct Packages {
     pub install: Value,
 }
 
-///Contains the supported package managers
+///Contains the supported package managers.
 #[derive(Debug)]
 pub enum PkgMgrs {
     Pacman,
     Yay,
 }
 
+///Maps the string name of a package manager to its PkgMgrs equivalent.
 pub static PKG_MGR_MAP: phf::Map<&str, PkgMgrs> = phf_map! {
     "pacman" => PkgMgrs::Pacman,
     "yay" => PkgMgrs::Yay,
@@ -35,7 +36,7 @@ pub static PKG_MGR_MAP: phf::Map<&str, PkgMgrs> = phf_map! {
 
 
 impl Config {
-    ///Builds a config from the contents of a toml file
+    ///Builds a config from the contents of a toml file.
     ///
     ///# Example
     ///```

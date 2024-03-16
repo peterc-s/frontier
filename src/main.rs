@@ -1,5 +1,6 @@
 use clap::Parser;
 use std::{fs, process};
+use colored::Colorize;
 
 mod args;
 mod config;
@@ -25,12 +26,13 @@ fn main() {
         process::exit(1);
     });
 
-    let pkg_mgr = config.pkg_mgr().unwrap();
+    // gets the package manager from the file
+    let pkg_mgr = config.pkg_mgr().unwrap_or_else(|err| {
+        eprintln!("Error parsing config: {}", err);
+        process::exit(1);
+    });
 
-    let install_str = pkgs_to_install.join(" ");
-
-    println!("{:?} {}", pkg_mgr, install_str);
-
+    println!("{} Running install command.", "[frontier]".bold().purple());
     install::install_pkgs(pkg_mgr, pkgs_to_install).unwrap_or_else(|err| {
         eprintln!("Error: {}", err);
         process::exit(1);
