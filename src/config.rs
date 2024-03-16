@@ -127,3 +127,97 @@ impl Config {
 
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::config::Config;
+    use std::error::Error;
+    use std::fs;
+
+    fn get_test_file_contents(name: &str) -> Result<String, Box<dyn Error>> {
+        Ok(fs::read_to_string(env!("CARGO_MANIFEST_DIR").to_owned() + "/resources/test/" + name)?)
+    }
+
+    // there is a lot of repetition in these tests which is fine,
+    // it makes debugging a little easier.
+
+    #[test]
+    fn good_config() {
+        let config_contents = get_test_file_contents("good/config.toml").unwrap();
+        
+        let config = Config::build(config_contents);
+
+        assert!(config.is_ok(), "Config was: {:?}", config);
+    }
+
+    #[test]
+    fn good_config_no_args() {
+        let config_contents = get_test_file_contents("good/no_args.toml").unwrap();
+
+        let config = Config::build(config_contents);
+
+        assert!(config.is_ok(), "Config was: {:?}", config);
+    }
+
+    #[test]
+    fn bad_config_missing_package_manager_name() {
+        let config_contents = get_test_file_contents("bad/missing_package_manager_name.toml").unwrap();
+
+        let config = Config::build(config_contents);
+
+        assert!(config.is_err(), "Config was: {:?}", config);
+    }
+
+    #[test]
+    fn bad_config_missing_pkgs_install() {
+        let config_contents = get_test_file_contents("bad/missing_pkgs_install.toml").unwrap();
+
+        let config = Config::build(config_contents);
+
+        assert!(config.is_err(), "Config was: {:?}", config);
+    }
+
+    #[test]
+    fn bad_config_args_not_array() {
+        let config_contents = get_test_file_contents("bad/args_not_array.toml").unwrap();
+
+        let config = Config::build(config_contents).unwrap();
+
+        let args_to_pkg_mgr = config.args_to_pkg_mgr();
+
+        assert!(args_to_pkg_mgr.is_err(), "Args were: {:?}", args_to_pkg_mgr);
+    }
+
+    #[test]
+    fn bad_config_install_not_array() {
+        let config_contents = get_test_file_contents("bad/install_not_array.toml").unwrap();
+
+        let config = Config::build(config_contents).unwrap();
+
+        let pkgs_to_install = config.pkgs_to_install();
+
+        assert!(pkgs_to_install.is_err(), "Install was: {:?}", pkgs_to_install);
+    }
+
+    #[test]
+    fn bad_config_unsupported_package_manager() {
+        let config_contents = get_test_file_contents("bad/unsupported_package_manager.toml").unwrap();
+
+        let config = Config::build(config_contents).unwrap();
+
+        let pkg_mgr = config.pkg_mgr();
+
+        assert!(pkg_mgr.is_err(), "Package manager was: {:?}", pkg_mgr);
+    }
+
+    #[test]
+    fn bad_config_package_manager_not_string() {
+        let config_contents = get_test_file_contents("bad/package_manager_not_string.toml").unwrap();
+
+        let config = Config::build(config_contents).unwrap();
+
+        let pkg_mgr = config.pkg_mgr();
+
+        assert!(pkg_mgr.is_err(), "Package manager was: {:?}", pkg_mgr);
+    }
+}
