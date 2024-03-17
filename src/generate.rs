@@ -15,6 +15,7 @@ impl Generate {
         match self.package_manager.as_str() {
             "pacman" => self.gen("pacman", vec!["-Qeq"], Some(vec!["--noconfirm", "-S"])),
              "yay" => self.gen("yay", vec!["-Qeq"], Some(vec!["--noconfirm"])),
+             "apt" => self.gen("apt-cache", vec!["pkgnames"], None),
              s => {
                  eprintln!("Error: unsupported package manager '{}'", s);
                  process::exit(1);
