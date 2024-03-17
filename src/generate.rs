@@ -43,6 +43,8 @@ fn format_package_list(mut package_list: String) -> String {
 }
 
 impl Generate {
+    /// Generates the configuration file using the given command, args to the command,
+    /// and the args that should be in the configuration file.
     fn gen(&self, command: &str, args: Vec<&str>, config_args: Option<Vec<&str>>) {
         let mut package_list = get_command_output(command, args).unwrap_or_else(|err| {
             eprintln!("Error whilst getting package list: {}", err);
@@ -55,21 +57,7 @@ impl Generate {
 name = "{}"{}
 
 [pkgs]"#, self.package_manager, match config_args {
-    Some(args) => {
-        let mut arg_field = args.iter()
-                .map(|arg| format!("\"{}\", ", arg))
-                .collect::<Vec<_>>()
-                .concat()
-                .as_mut_str()
-                .chars()
-                .as_str()
-                .to_string();
-
-        arg_field.pop();
-        arg_field.pop();
-
-        format!("\nargs = [{}]", arg_field)
-    },
+    Some(args) => format!("\n{}",format_args_field(args)),
     None => "".to_string(),
 }).to_string();
 
@@ -85,4 +73,22 @@ name = "{}"{}
             process::exit(1);
         });
     }
+}
+
+/// Takes in a `Vec<&str>` of args and returns the string of the args field
+/// for the config file.
+fn format_args_field(args: Vec<&str>) -> String {
+    let mut arg_field = args.iter()
+            .map(|arg| format!("\"{}\", ", arg))
+            .collect::<Vec<_>>()
+            .concat()
+            .as_mut_str()
+            .chars()
+            .as_str()
+            .to_string();
+
+    arg_field.pop();
+    arg_field.pop();
+
+    format!("args = [{}]", arg_field)
 }
