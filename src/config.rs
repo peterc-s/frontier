@@ -25,12 +25,14 @@ pub struct Packages {
 ///Contains the supported package managers.
 #[derive(Debug)]
 pub enum PkgMgrs {
+    Apt,
     Pacman,
     Yay,
 }
 
 ///Maps the string name of a package manager to its PkgMgrs equivalent.
 pub static PKG_MGR_MAP: phf::Map<&str, PkgMgrs> = phf_map! {
+    "apt" => PkgMgrs::Apt,
     "pacman" => PkgMgrs::Pacman,
     "yay" => PkgMgrs::Yay,
 };

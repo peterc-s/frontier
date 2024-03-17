@@ -67,9 +67,20 @@ impl Install {
 /// or std::process::Child.wait() fails.
 pub fn install_pkgs(package_manager: &PkgMgrs, args: Vec<&str>, packages: Vec<&str>) -> Result<(), Box<dyn Error>> {
     match package_manager {
+        PkgMgrs::Apt => apt(packages, args),
         PkgMgrs::Pacman => pacman(packages, args),
         PkgMgrs::Yay => yay(packages, args),
     }
+}
+
+fn apt(packages: Vec<&str>, mut args: Vec<&str>) -> Result<(), Box<dyn Error>> {
+    if !args.contains(&"install") {
+        args.append(&mut vec!["install"]);
+    }
+
+    run_install_command(true, "apt", args, packages)?;
+
+    Ok(())
 }
 
 fn pacman(packages: Vec<&str>, mut args: Vec<&str>) -> Result<(), Box<dyn Error>> {
