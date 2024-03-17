@@ -13,7 +13,7 @@ pub struct Generate {
 impl Generate {
     pub fn run(&self) {
         match self.package_manager.as_str() {
-            "pacman" => self.gen("pacman", vec!["-Qeq"], Some(vec!["--noconfirm"])),
+            "pacman" => self.gen("pacman", vec!["-Qeq"], Some(vec!["--noconfirm", "-S"])),
              "yay" => self.gen("yay", vec!["-Qeq"], Some(vec!["--noconfirm"])),
              s => {
                  eprintln!("Error: unsupported package manager '{}'", s);
@@ -78,17 +78,10 @@ name = "{}"{}
 /// Takes in a `Vec<&str>` of args and returns the string of the args field
 /// for the config file.
 fn format_args_field(args: Vec<&str>) -> String {
-    let mut arg_field = args.iter()
-            .map(|arg| format!("\"{}\", ", arg))
+    let arg_field = args.iter()
+            .map(|arg| format!("\"{}\"", arg))
             .collect::<Vec<_>>()
-            .concat()
-            .as_mut_str()
-            .chars()
-            .as_str()
-            .to_string();
-
-    arg_field.pop();
-    arg_field.pop();
+            .join(", ");
 
     format!("args = [{}]", arg_field)
 }
