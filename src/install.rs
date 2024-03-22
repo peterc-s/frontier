@@ -88,6 +88,7 @@ impl Install {
 pub fn install_pkgs(package_manager: &PkgMgrs, args: Vec<&str>, packages: Vec<&str>) -> Result<(), Box<dyn Error>> {
     match package_manager {
         PkgMgrs::Apt => apt(packages, args),
+        PkgMgrs::Brew => brew(packages, args),
         PkgMgrs::Pacman => pacman(packages, args),
         PkgMgrs::Yay => yay(packages, args),
     }
@@ -99,6 +100,16 @@ fn apt(packages: Vec<&str>, mut args: Vec<&str>) -> Result<(), Box<dyn Error>> {
     }
 
     run_install_command(true, "apt", args, packages)?;
+
+    Ok(())
+}
+
+fn brew(packages: Vec<&str>, mut args: Vec<&str>) -> Result<(), Box<dyn Error>> {
+    if !args.contains(&"install") {
+        args.append(&mut vec!["install"]);
+    }
+
+    run_install_command(false, "brew", args, packages)?;
 
     Ok(())
 }

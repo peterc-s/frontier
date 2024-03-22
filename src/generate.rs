@@ -33,9 +33,10 @@ pub struct Generate {
 impl Generate {
     pub fn run(&self) {
         match self.package_manager.as_str() {
-            "pacman" => self.gen("pacman", vec!["-Qeq"], Some(vec!["--noconfirm", "-S"])),
-             "yay" => self.gen("yay", vec!["-Qeq"], Some(vec!["--noconfirm"])),
              "apt" => self.gen("apt-mark", vec!["showmanual"], Some(vec!["-y"])),
+             "brew" => self.gen("brew", vec!["leaves"], None),
+             "pacman" => self.gen("pacman", vec!["-Qeq"], Some(vec!["--noconfirm", "-S"])),
+             "yay" => self.gen("yay", vec!["-Qeq"], Some(vec!["--noconfirm"])),
              s => {
                  eprintln!("Error: unsupported package manager '{}'", s);
                  process::exit(1);

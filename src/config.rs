@@ -46,6 +46,7 @@ pub struct Packages {
 #[derive(Debug)]
 pub enum PkgMgrs {
     Apt,
+    Brew,
     Pacman,
     Yay,
 }
@@ -53,6 +54,7 @@ pub enum PkgMgrs {
 ///Maps the string name of a package manager to its PkgMgrs equivalent.
 pub static PKG_MGR_MAP: phf::Map<&str, PkgMgrs> = phf_map! {
     "apt" => PkgMgrs::Apt,
+    "brew" => PkgMgrs::Brew,
     "pacman" => PkgMgrs::Pacman,
     "yay" => PkgMgrs::Yay,
 };
