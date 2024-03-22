@@ -25,6 +25,7 @@ use std::io::Write;
 use std::error::Error;
 
 #[derive(Args)]
+#[clap(about = "Generates an installation configuration file from your package manager")]
 pub struct Generate {
     package_manager: String,
     output_file: String,
