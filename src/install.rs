@@ -90,6 +90,7 @@ pub fn install_pkgs(package_manager: &PkgMgrs, args: Vec<&str>, packages: Vec<&s
         PkgMgrs::Apt => apt(packages, args),
         PkgMgrs::Brew => brew(packages, args),
         PkgMgrs::Pacman => pacman(packages, args),
+        PkgMgrs::Paru => paru(packages, args),
         PkgMgrs::Yay => yay(packages, args),
     }
 }
@@ -122,6 +123,14 @@ fn pacman(packages: Vec<&str>, mut args: Vec<&str>) -> Result<(), Box<dyn Error>
     run_install_command(true, "pacman", args, packages)?;
 
     Ok(())
+}
+
+fn paru(packages: Vec<&str>, mut args: Vec<&str>) -> Result<(), Box<dyn Error>> {
+    if !args.contains(&"-S") {
+        args.append(&mut vec!["-S"])
+    }
+
+    run_install_command(false, "paru", args, packages)
 }
 
 fn yay(packages: Vec<&str>, mut args: Vec<&str>) -> Result<(), Box<dyn Error>> {
