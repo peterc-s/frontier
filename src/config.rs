@@ -48,6 +48,7 @@ pub enum PkgMgrs {
     Apt,
     Brew,
     Pacman,
+    Paru,
     Yay,
 }
 
@@ -56,6 +57,7 @@ pub static PKG_MGR_MAP: phf::Map<&str, PkgMgrs> = phf_map! {
     "apt" => PkgMgrs::Apt,
     "brew" => PkgMgrs::Brew,
     "pacman" => PkgMgrs::Pacman,
+    "paru" => PkgMgrs::Paru,
     "yay" => PkgMgrs::Yay,
 };
 

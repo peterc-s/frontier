@@ -37,6 +37,7 @@ impl Generate {
              "apt" => self.gen("apt-mark", vec!["showmanual"], Some(vec!["-y"])),
              "brew" => self.gen("brew", vec!["leaves"], None),
              "pacman" => self.gen("pacman", vec!["-Qeq"], Some(vec!["--noconfirm", "-S"])),
+             "paru" => self.gen("paru", vec!["-Qeq"], Some(vec!["--noconfirm"])),
              "yay" => self.gen("yay", vec!["-Qeq"], Some(vec!["--noconfirm"])),
              s => {
                  eprintln!("Error: unsupported package manager '{}'", s);
